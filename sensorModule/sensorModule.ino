@@ -6,7 +6,7 @@ const int wakeUpPin = 2; // pin of interrupt 0
 const int LED = 8;
 boolean armed = true;
 
-SoftwareSerial mySerial(12,11);
+SoftwareSerial mySerial(4,5);
 
 String ID = "0001";
 String code = "01";
@@ -26,9 +26,9 @@ void setup()
   pinMode(wakeUpPin, INPUT_PULLUP);
   pinMode(LED, OUTPUT);
   
-  Serial.begin(19200);
+  Serial.begin(9600);
     
-  mySerial.begin(19200); 
+  mySerial.begin(9600); 
   mySerial.println(msg);
   Serial.println(msg);
   

@@ -6,7 +6,7 @@
 #define IDlen 4
 #define maxID 5
 
-SoftwareSerial mySerial(12,11);
+SoftwareSerial mySerial(2,3);
 LiquidCrystal_I2C lcd(0x27, 16, 2);
 int upButtonPin = 7;
 int selectButtonPin = 6;
@@ -21,10 +21,10 @@ int removeID(int senNumInt);
 
 void setup()
 {
-  Serial.begin(19200);
+  Serial.begin(9600);
   Serial.println("Serial began.");
 
-  mySerial.begin(19200);
+  mySerial.begin(9600);
   mySerial.println("mySerial began.");
   
   lcd.begin();
@@ -58,6 +58,7 @@ void loop()
     
     String rcvMsg = mySerial.readStringUntil('\n');
     Serial.println(rcvMsg);
+    Serial.println(rcvMsg.substring(0,4));
     
     
 //    mySerial.write(rcvMsg);
@@ -77,6 +78,7 @@ void menu(){
       lcd.print("Add sensor:");
       delay(1500);
       lcd.clear();
+//      String senNum = 0001
       int senNumInt = 1000;
       char senNum[IDlen];
       sprintf(senNum, "%d", senNumInt);
