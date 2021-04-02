@@ -11,8 +11,10 @@ LiquidCrystal_I2C lcd(0x27, 16, 2);
 int upButtonPin = 7;
 int selectButtonPin = 6;
 int downButtonPin = 5;
-int sensors[maxID] = {9999,9999,9999,9999,9999};
+int sensors[maxID] = {1001,9999,9999,9999,9999};
+int receivedID = 0;
 int currentPos = 0;
+String ack = "0000";
 
 //void printSensor(int intID);
 void menu();
@@ -58,8 +60,19 @@ void loop()
     
     String rcvMsg = mySerial.readStringUntil('\n');
     Serial.println(rcvMsg);
-    Serial.println(rcvMsg.substring(0,4));
+    receivedID = rcvMsg.substring(0,4).toInt();
+    Serial.println(receivedID);
+    delay(800);
     
+    for (int i=0;i<maxID;i++){
+      Serial.print(sensors[i]);
+      Serial.print(receivedID);
+      if(sensors[i] == receivedID){
+        ack = String(receivedID + "01"); // 01: success 02: reject (ID does not exist)
+        Serial.println("Ack sent.");
+        mySerial.println(ack);   
+      }
+    }
     
 //    mySerial.write(rcvMsg);
   }
@@ -78,7 +91,6 @@ void menu(){
       lcd.print("Add sensor:");
       delay(1500);
       lcd.clear();
-//      String senNum = 0001
       int senNumInt = 1000;
       char senNum[IDlen];
       sprintf(senNum, "%d", senNumInt);
