@@ -14,7 +14,7 @@ int downButtonPin = 5;
 int sensors[maxID] = {1001,9999,9999,9999,9999};
 int receivedID = 0;
 int currentPos = 0;
-String ack = "0000";
+//String ack = "0000";
 
 //void printSensor(int intID);
 void menu();
@@ -68,8 +68,10 @@ void loop()
       Serial.print(sensors[i]);
       Serial.print(receivedID);
       if(sensors[i] == receivedID){
-        ack = String(receivedID + "01"); // 01: success 02: reject (ID does not exist)
-        Serial.println("Ack sent.");
+        String temp = String(receivedID);
+        String ack = String(temp + "01"); // 01: success 02: reject (ID does not exist)
+        Serial.print("Ack sent: ");
+        Serial.print(ack);
         mySerial.println(ack);   
       }
     }

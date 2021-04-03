@@ -29,10 +29,10 @@ void setup()
   pinMode(LED, OUTPUT);
   timerID = timer.setInterval(1000, sendMsg);
   
-  Serial.begin(9600);
-    
+  Serial.begin(9600);  
   mySerial.begin(9600); 
-  mySerial.println(msg);
+  
+//  mySerial.println(msg);
   Serial.println(msg);
   
   delay(100);
@@ -50,7 +50,6 @@ void loop() // 반복
 
 void wakeUpNow(){
   if(armed){
-    Serial.println("wake up.");
     Serial.println("Waked up. Send Feed full msg.");
     delay(200);
     code = "02";
@@ -63,7 +62,7 @@ void wakeUpNow(){
 //    Serial.print('\n');
 //    Serial.print("Timer started. waiting for response.\n");
     while(1){
-      Serial.print('*');
+      Serial.println("**");
       if(mySerial.available()>0){
         Serial.println("RECEIVED!!!!");
         rcvMsg = mySerial.readStringUntil('\n');
@@ -82,6 +81,7 @@ void wakeUpNow(){
 
 void sleepNow(){
   Serial.println("Entered sleep now()");
+  delay(100);
   set_sleep_mode(SLEEP_MODE_PWR_DOWN); 
   sleep_enable(); 
   attachInterrupt(0,wakeUpNow, LOW); 
