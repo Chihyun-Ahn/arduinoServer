@@ -6,15 +6,15 @@ SimpleTimer timer;
 const int wakeUpPin = 2; // pin of interrupt 0
 const int LED = 8;
 const int numMsg = 1; // For the safety, send multiple messages, everytime.  
-boolean armed = true;
+boolean armed = false;
 SoftwareSerial mySerial(4,5);
 String ID = "1001";
 String code = "01";
 String msg = "xxxx";
 String rcvMsg = "xxxx";
 int timerID = 0;
+boolean isWaked = false;
 
-//int cnt = 0;
 /*
   Communication protocol
   01: powered on
@@ -31,10 +31,7 @@ void setup()
   
   Serial.begin(9600);  
   mySerial.begin(9600); 
-  
-//  mySerial.println(msg);
   Serial.println(msg);
-  
   delay(100);
 }
 
@@ -46,29 +43,26 @@ void loop() // 반복
   Serial.println("Now sleeping.."); 
   delay(200);
   sleepNow(); 
-}  
 
-void wakeUpNow(){
   if(armed){
     Serial.println("Waked up. Send Feed full msg.");
     delay(200);
     code = "02";
     msg = String(ID + code);
     sendMsg();
-//    timer.run();
-
-//    Serial.print("Msg sent: ");
-//    Serial.print(msg);
-//    Serial.print('\n');
-//    Serial.print("Timer started. waiting for response.\n");
     int count = 0;
     while(1){
+      count++;
+      if(count>20000){      //prevent infinite loop
+        count = 0;
+        break;
+      }
       Serial.print('*');
       if(mySerial.available()>0){
         Serial.println("RECEIVED!!!!");
         rcvMsg = mySerial.readStringUntil('\n');
         if(rcvMsg.substring(0,4).equals(ID)){
-          timer.deleteTimer(timerID);
+//          timer.deleteTimer(timerID);
           Serial.println("My msg is received successfully. Now sleep again..\n");
           break;
         }
@@ -77,6 +71,10 @@ void wakeUpNow(){
     }
     armed = false;
   }
+}  
+
+void wakeUpNow(){
+  isWaked = true;
   return;
 }
 

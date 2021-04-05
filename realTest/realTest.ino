@@ -62,7 +62,7 @@ void loop()
     Serial.println(rcvMsg);
     receivedID = rcvMsg.substring(0,4).toInt();
     Serial.println(receivedID);
-    delay(800);
+    delay(100);
     
     for (int i=0;i<maxID;i++){
       Serial.print(sensors[i]);
@@ -72,10 +72,9 @@ void loop()
         String ack = String(temp + "01"); // 01: success 02: reject (ID does not exist)
         Serial.print("Ack sent: ");
         Serial.print(ack);
-        for(int i=0;i<200;i++){
-          mySerial.println(ack); 
-          delay(100);
-        } 
+        mySerial.println(ack); 
+        
+        
       }
     }
     
