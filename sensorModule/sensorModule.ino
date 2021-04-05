@@ -61,18 +61,19 @@ void wakeUpNow(){
 //    Serial.print(msg);
 //    Serial.print('\n');
 //    Serial.print("Timer started. waiting for response.\n");
+    int count = 0;
     while(1){
-      Serial.println("**");
+      Serial.print('*');
       if(mySerial.available()>0){
         Serial.println("RECEIVED!!!!");
         rcvMsg = mySerial.readStringUntil('\n');
         if(rcvMsg.substring(0,4).equals(ID)){
           timer.deleteTimer(timerID);
-          Serial.println("My msg is received successfully. Now sleep again..");
+          Serial.println("My msg is received successfully. Now sleep again..\n");
           break;
         }
       }
-//      delay(100);  
+      delay(50);  
     }
     armed = false;
   }

@@ -2,7 +2,7 @@
 
 String ID = "0001";
 String code = "01";
-int
+//int
 String msg = "xxxx";
 /*
   Communication protocol
@@ -11,7 +11,7 @@ String msg = "xxxx";
   03: alive
  */
 
-SoftwareSerial HC12(2,3); // HC-12 TX Pin, HC-12 RX Pin
+SoftwareSerial HC12(4,5); // HC-12 TX Pin, HC-12 RX Pin
 
 void setup() {
   Serial.begin(9600);
@@ -30,5 +30,10 @@ void loop()
   Serial.print("Msg sent: ");
   Serial.print(msg);
   Serial.print('\n');
+  Serial.println("Waiting ACK.");
+  if(HC12.available()){
+    Serial.println(HC12.readStringUntil('\n'));
+    
+  }
   delay(800);
 }

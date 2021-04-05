@@ -72,7 +72,10 @@ void loop()
         String ack = String(temp + "01"); // 01: success 02: reject (ID does not exist)
         Serial.print("Ack sent: ");
         Serial.print(ack);
-        mySerial.println(ack);   
+        for(int i=0;i<200;i++){
+          mySerial.println(ack); 
+          delay(100);
+        } 
       }
     }
     
