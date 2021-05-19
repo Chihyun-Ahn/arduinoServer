@@ -14,7 +14,9 @@ int downButtonPin = 5;
 int sensors[maxID] = {1001,9999,9999,9999,9999};
 int receivedID = 0;
 int currentPos = 0;
-//String ack = "0000";
+int relayPin = 11;
+
+String rcvMsg = "xxxx";
 
 //void printSensor(int intID);
 void menu();
@@ -27,16 +29,19 @@ void setup()
   Serial.println("Serial began.");
 
   mySerial.begin(9600);
-  mySerial.println("mySerial began.");
+//  mySerial.println("0000");
   
   lcd.begin();
   pinMode(upButtonPin,  INPUT_PULLUP);
   pinMode(selectButtonPin, INPUT_PULLUP);
   pinMode(downButtonPin, INPUT_PULLUP);
+  pinMode(relayPin, OUTPUT);
 }
 
 void loop()
 {
+  digitalWrite(relayPin, LOW);
+  rcvMsg = "xxxx";
   lcd.setCursor(1,1);
   lcd.clear();
   lcd.print("Ready");
@@ -57,30 +62,27 @@ void loop()
     menu();
   }
   if(mySerial.available()>0){
-    
-    String rcvMsg = mySerial.readStringUntil('\n');
-    Serial.println(rcvMsg);
+//    String rcvMsg = mySerial.readStringUntil('\n');
+    rcvMsg = mySerial.readStringUntil('\n');
+    Serial.print("Received msg: ");
+    Serial.print(rcvMsg);
+    Serial.print('\n');
     receivedID = rcvMsg.substring(0,4).toInt();
     Serial.println(receivedID);
-    delay(100);
+    delay(50);
     
     for (int i=0;i<maxID;i++){
-      Serial.print(sensors[i]);
-      Serial.print(receivedID);
       if(sensors[i] == receivedID){
         String temp = String(receivedID);
         String ack = String(temp + "01"); // 01: success 02: reject (ID does not exist)
+        digitalWrite(relayPin, HIGH);
+        mySerial.println(ack);
         Serial.print("Ack sent: ");
         Serial.print(ack);
-        mySerial.println(ack); 
-        
-        
       }
     }
-    
-//    mySerial.write(rcvMsg);
   }
-//  delay(200);
+  delay(50);
 }
 
 void menu(){
